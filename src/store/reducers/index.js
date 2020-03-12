@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import CountStore from './Count'
+import app from './app'
 
 export default combineReducers({
-    count: CountStore
+    app
 })
