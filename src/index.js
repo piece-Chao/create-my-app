@@ -1,16 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
-import Calculator from './store/reducer'
+import { Provider, connect } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import rootReducers from './store/reducers/index';
+import mapStateToProps from './store/selectors';
+import MyRoute from './router';
+import { HashRouter } from 'react-router-dom';
+import sagas from './store/sagas';
 
-const store = createStore(Calculator)
-
+const sagaMiddleware = createSagaMiddleware()
+const App = connect(mapStateToProps, (dispatch)=>{ return {dispatch}})(MyRoute);
+const store = createStore(rootReducers, applyMiddleware(sagaMiddleware));
+sagaMiddleware.run(sagas)
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <HashRouter>
+            <App />
+        </HashRouter>
     </Provider>,
     document.getElementById('root')
 );
